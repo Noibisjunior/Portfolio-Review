@@ -1,6 +1,7 @@
 import eight from '../assets/svg/projects/est.jpg'
-import seven from '../assets/svg/projects/seven.svg'
+import finpay from '../assets/svg/projects/finPay.png'
 import six from '../assets/svg/projects/six.svg'
+import rekindle from '../assets/svg/projects/rekindle.png'
 
 
 export const projectsData = [
@@ -16,13 +17,13 @@ export const projectsData = [
   },
   {
     id: 2,
-    projectName: 'Online Coding Bootcamp',
+    projectName: 'A FinTech Platform',
     projectDesc:
-      'This project is an online Coding Bootcamp built with the MVC Architecture.',
-    tags: ['Nodejs', 'Express', 'HandleBars', 'MongoDB', 'BootStrap'],
-    code: 'https://github.com/Noibisjunior/FULLSTACK-WEB-APPLICATION',
-    demo: 'https://noibis-dev.cyclic.app/',
-    image: seven,
+      'FinPay is a comprehensive, modern financial technology platform built with a full-stack architecture. It provides users with powerful tools for digital wallet management, invoice creation, virtual card services, and seamless transaction handling. The platform combines a robust Node.js backend with a sleek Vue.js frontend to deliver a professional banking experience.',
+    tags: ['Nodejs', 'Express', 'TailwindCSS', 'vuejs', 'MongoDB'],
+    code: 'https://github.com/Noibisjunior/GenzPay-FinTech-Project',
+    demo: 'https://genzpay-w86e.onrender.com/',
+    image: finpay,
   },
   {
     id: 3,
@@ -33,6 +34,16 @@ export const projectsData = [
     code: 'https://github.com/Noibisjunior/Estate-React-web-app',
     demo: 'https://estate-react-web-app.vercel.app/',
     image: eight,
+  },
+  {
+    id: 4,
+    projectName: 'Rekindle',
+    projectDesc:
+      'Rekindle is a robust TypeScript-based backend API for managing professional connections, built with Express.js, MongoDB, and Redis (BullMQ). It provides secure authentication, dynamic QR code generation, comprehensive user profile management with image uploads, and a sophisticated reminder system to foster meaningful professional relationships.',
+    tags: ['ReactJS,TypeScript,Express,MongoDB'],
+    code: 'https://github.com/Noibisjunior/Rekindle',
+    demo: 'https://frontend-service-8sxa.onrender.com/',
+    image: rekindle,
   },
 ];
 

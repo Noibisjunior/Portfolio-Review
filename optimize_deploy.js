@@ -61,3 +61,4 @@ generateInfrastructure();
 
 
 //$env:GEMINI_API_KEY="AIzaSyDi8YPkCTmbareg4v4EkDwL0Bbxa1p0oN8"
+//  https://portfolio-v2-1093096103222.us-central1.run.app
