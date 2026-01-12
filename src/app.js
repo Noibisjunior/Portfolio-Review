@@ -8,12 +8,14 @@ import ChangeTheme from './components/helper/change-theme/change-theme';
 import ScrollToTop from './components/helper/scroll-to-top';
 import { ThemeContext } from './contexts/theme-context';
 import { BlogPage, HomePage, ProjectPage } from './pages';
+import RecruiterAI from './components/RecruiterAI';
+import { projectsData } from './data/projectsData';
 
 function App() {
   const { theme } = useContext(ThemeContext);
 
   return (
-    <div style={{ backgroundColor: theme.secondary }}>
+    <div style={{ backgroundColor: theme.secondary }} className="App">
       <Router>
         <ScrollToTop />
         <Routes>
@@ -28,6 +30,7 @@ function App() {
       </Router>
       <BackToTop />
       <ChangeTheme />
+      <RecruiterAI projectsData={projectsData} />
     </div>
   );
 }
