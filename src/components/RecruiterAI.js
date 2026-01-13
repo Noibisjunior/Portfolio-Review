@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Fab from '@mui/material/Fab';
+import { AiOutlineRobot } from "react-icons/ai";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -34,7 +35,7 @@ const RecruiterAI = ({ projectsData }) => {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-      const prompt = `Analyze the following job description and explain why my projects are a good fit:\n\nJob Description:\n${jobDescription}\n\nProjects:\n${JSON.stringify(projectsData)}`;
+      const prompt = `Analyze the following job description and explain why my projects are a good fit to the recruiter or potential employer:\n\nJob Description:\n${jobDescription}\n\nProjects:\n${JSON.stringify(projectsData)}`;
       
       const result = await model.generateContent(prompt);
       const response = await result.response;
@@ -52,11 +53,13 @@ const RecruiterAI = ({ projectsData }) => {
   return (
     <>
       <Fab
+        variant="extended"
         color="primary"
         aria-label="Recruiter Mode"
         onClick={handleOpen}
-        style={{ position: 'fixed', bottom: 16, right: 16 }}
+        style={{ position: 'fixed', bottom: 30, left: 30, zIndex: 1000, fontWeight: 'bold' }}
       >
+        <AiOutlineRobot style={{ fontSize: '1.5rem', marginRight: '8px' }} />
         Recruiter Mode
       </Fab>
 
