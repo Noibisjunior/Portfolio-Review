@@ -9,21 +9,25 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import ReactMarkdown from 'react-markdown';
+import { jsPDF } from "jspdf";
 
 const RecruiterAI = ({ projectsData }) => {
   const [open, setOpen] = useState(false);
   const [jobDescription, setJobDescription] = useState('');
   const [analysisResult, setAnalysisResult] = useState('');
   const [loading, setLoading] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleAnalyze = async () => {
     if (!jobDescription) return;
-
     setLoading(true);
     try {
       const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
@@ -47,6 +51,45 @@ const RecruiterAI = ({ projectsData }) => {
       setAnalysisResult(`Error: ${error.message || error.toString()}. Please check your API key and try again.`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGeneratePDF = async () => {
+    setPdfLoading(true);
+    try {
+      const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
+      if (!apiKey) throw new Error("API key is missing");
+
+      const genAI = new GoogleGenerativeAI(apiKey);
+      // Using the model requested for the feature
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+      const prompt = `Write a professional, enthusiastic cover letter based on the following job description and my projects.
+      
+      Job Description:
+      ${jobDescription}
+      
+      Projects:
+      ${JSON.stringify(projectsData)}
+      
+      CONSTRAINT: Output ONLY the raw body text of the letter. Do not use Markdown. Do not use placeholders.`;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+
+      const doc = new jsPDF();
+      doc.setFontSize(12);
+      // Wrap text to fit within PDF page width (A4 is approx 210mm wide, leaving margins)
+      const splitText = doc.splitTextToSize(text, 170);
+      doc.text(splitText, 15, 20);
+      doc.save("Gemini_Cover_Letter.pdf");
+
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Failed to generate PDF. Please try again.");
+    } finally {
+      setPdfLoading(false);
     }
   };
 
@@ -76,17 +119,35 @@ const RecruiterAI = ({ projectsData }) => {
             placeholder="Paste your job description here to see why i am best fit for the role"
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="secondary">Cancel</Button>
-          <Button onClick={handleAnalyze} color="primary" disabled={loading}>
-            {loading ? 'Analyzing...' : 'Analyze'}
-          </Button>
-        </DialogActions>
+        
+        {!analysisResult && (
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary">Cancel</Button>
+            <Button onClick={handleAnalyze} color="primary" disabled={loading}>
+              {loading ? 'Analyzing...' : 'Analyze'}
+            </Button>
+          </DialogActions>
+        )}
 
         {analysisResult && (
-          <Card style={{ margin: 16, backgroundColor: '#f5f5f5', maxHeight: '200px', overflowY: 'auto' }}>
+          <Card style={{ margin: 16, backgroundColor: '#f5f5f5', maxHeight: '400px', overflowY: 'auto' }}>
             <CardContent>
               <ReactMarkdown>{analysisResult}</ReactMarkdown>
+              <Divider sx={{ my: 2 }} />
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Button onClick={() => setAnalysisResult('')} color="secondary">
+                  Analyze Another
+                </Button>
+                <Button 
+                  onClick={handleGeneratePDF} 
+                  color="success" 
+                  variant="contained" 
+                  disabled={pdfLoading}
+                  startIcon={<PictureAsPdfIcon />}
+                >
+                  {pdfLoading ? 'Writing...' : 'Download Cover Letter'}
+                </Button>
+              </Box>
             </CardContent>
           </Card>
         )}
@@ -113,3 +174,7 @@ Gaining hands-on experience in backend development while working in a collaborat
 2
 
 This role typically requires a bachelor's degree in Computer Science or a related field, with 1-2 years of experience in backend development.*/
+
+
+ERROR in ./src/components/RecruiterAI.js 18:0-64
+Module not found: Error: Can't resolve '@mui/icons-material/PictureAsPdf' in 'C:\Users\USER\Downloads\Super-developer-portfolio-master\src\components'
