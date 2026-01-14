@@ -15,6 +15,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import ReactMarkdown from 'react-markdown';
 import { jsPDF } from "jspdf";
+import { motion, AnimatePresence } from "framer-motion";
 
 const RecruiterAI = ({ projectsData }) => {
   const [open, setOpen] = useState(false);
@@ -62,7 +63,7 @@ const RecruiterAI = ({ projectsData }) => {
 
       const genAI = new GoogleGenerativeAI(apiKey);
       // Using the model requested for the feature
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
       const prompt = `Write a professional, enthusiastic cover letter based on the following job description and my projects.
       
@@ -109,48 +110,63 @@ const RecruiterAI = ({ projectsData }) => {
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>Recruiter Match</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Job Description"
-            multiline
-            rows={4}
-            fullWidth
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            placeholder="Paste your job description here to see why i am best fit for the role"
-          />
+          <AnimatePresence mode="wait">
+            {!analysisResult ? (
+              <motion.div
+                key="input"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <TextField
+                  label="Job Description"
+                  multiline
+                  rows={4}
+                  fullWidth
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                  placeholder="Paste your job description here to see why i am best fit for the role"
+                  sx={{ mt: 1 }}
+                />
+                <DialogActions>
+                  <Button onClick={handleClose} color="secondary">Cancel</Button>
+                  <Button onClick={handleAnalyze} color="primary" disabled={loading}>
+                    {loading ? 'Analyzing...' : 'Analyze'}
+                  </Button>
+                </DialogActions>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="results"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 100 }}
+              >
+                <Card style={{ margin: '16px 0', backgroundColor: '#f5f5f5', maxHeight: '400px', overflowY: 'auto' }}>
+                  <CardContent>
+                    <ReactMarkdown>{analysisResult}</ReactMarkdown>
+                    <Divider sx={{ my: 2 }} />
+                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                      <Button onClick={() => setAnalysisResult('')} color="secondary">
+                        Analyze Another
+                      </Button>
+                      <Button 
+                        onClick={handleGeneratePDF} 
+                        color="success" 
+                        variant="contained" 
+                        disabled={pdfLoading}
+                        startIcon={<PictureAsPdfIcon />}
+                      >
+                        {pdfLoading ? 'Writing...' : 'Download Cover Letter'}
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </DialogContent>
-        
-        {!analysisResult && (
-          <DialogActions>
-            <Button onClick={handleClose} color="secondary">Cancel</Button>
-            <Button onClick={handleAnalyze} color="primary" disabled={loading}>
-              {loading ? 'Analyzing...' : 'Analyze'}
-            </Button>
-          </DialogActions>
-        )}
-
-        {analysisResult && (
-          <Card style={{ margin: 16, backgroundColor: '#f5f5f5', maxHeight: '400px', overflowY: 'auto' }}>
-            <CardContent>
-              <ReactMarkdown>{analysisResult}</ReactMarkdown>
-              <Divider sx={{ my: 2 }} />
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Button onClick={() => setAnalysisResult('')} color="secondary">
-                  Analyze Another
-                </Button>
-                <Button 
-                  onClick={handleGeneratePDF} 
-                  color="success" 
-                  variant="contained" 
-                  disabled={pdfLoading}
-                  startIcon={<PictureAsPdfIcon />}
-                >
-                  {pdfLoading ? 'Writing...' : 'Download Cover Letter'}
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
-        )}
       </Dialog>
     </>
   );
@@ -176,5 +192,3 @@ Gaining hands-on experience in backend development while working in a collaborat
 This role typically requires a bachelor's degree in Computer Science or a related field, with 1-2 years of experience in backend development.*/
 
 
-ERROR in ./src/components/RecruiterAI.js 18:0-64
-Module not found: Error: Can't resolve '@mui/icons-material/PictureAsPdf' in 'C:\Users\USER\Downloads\Super-developer-portfolio-master\src\components'

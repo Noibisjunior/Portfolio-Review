@@ -10,12 +10,14 @@ import { ThemeContext } from './contexts/theme-context';
 import { BlogPage, HomePage, ProjectPage } from './pages';
 import RecruiterAI from './components/RecruiterAI';
 import { projectsData } from './data/projectsData';
+import NeuralBackground from './components/NeuralBackground';
 
 function App() {
   const { theme } = useContext(ThemeContext);
 
   return (
-    <div style={{ backgroundColor: theme.secondary }} className="App">
+    <div style={{ backgroundColor: theme.secondary, position: 'relative', zIndex: 0 }} className="App">
+      <NeuralBackground />
       <Router>
         <ScrollToTop />
         <Routes>
