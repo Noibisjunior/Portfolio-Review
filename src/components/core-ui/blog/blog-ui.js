@@ -9,40 +9,23 @@ const BlogUI = ({ classes, blogData }) => {
   const { theme } = useContext(ThemeContext);
 
   return (
-    <>
-      {blogData.length > 0 && (
-        <div
-          className="blog" id="blog"
-          style={{ backgroundColor: theme.secondary }}>
-          <div className="blog--header">
-            <h1 style={{ color: theme.primary }}>Blog</h1>
-          </div>
-          <div className="blog--body">
-            <div className="blog--bodyContainer">
-              {blogData.slice(0, 3).map(blog => (
-                <BlogCard
-                  theme={theme}
-                  blog={blog}
-                  key={blog.id}
-                />
-              ))}
-            </div>
-
-            {blogData.length > 3 && (
-              <div className="blog--viewAll">
-                <Link to="/blog">
-                  <button className={classes.viewAllBtn}>
-                    View All
-                    <HiArrowRight className={classes.viewArr} />
-                  </button>
-                </Link>
-              </div>
-            )}
-          </div>
+    <div
+      className="blog" id="blog"
+      style={{ backgroundColor: theme.secondary }}>
+      <div className="blog--header">
+        <h1 style={{ color: theme.primary }}>Blog</h1>
+      </div>
+      <div className="blog--body">
+        <div className="blog--viewAll">
+          <a href="https://writetech-accelerator-portfolio-abd.vercel.app/" target="_blank" rel="noreferrer">
+            <button className={classes.viewAllBtn}>
+              Visit My Writing Portfolio
+              <HiArrowRight className={classes.viewArr} />
+            </button>
+          </a>
         </div>
-      )}
-
-    </>
+      </div>
+    </div>
   );
 };
 

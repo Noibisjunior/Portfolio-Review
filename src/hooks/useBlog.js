@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { contactsData } from '../data/contactsData';
+import { blogData } from '../data/blogData';
 
 function UseBlog() {
   const [blogs, setBlogs] = useState([]);
@@ -10,8 +11,16 @@ function UseBlog() {
       .then((response) => response.json())
       .then(data => {
         const filtered = data.sort(() => Math.random() - 0.5);
-        setBlogs(filtered)
+        if (filtered.length > 0) {
+            setBlogs(filtered)
+        } else {
+            setBlogs(blogData)
+        }
       })
+      .catch((error) => {
+          console.error("Failed to fetch blogs:", error);
+          setBlogs(blogData);
+      });
   }, [devUsername]);
 
   return { blogs };
