@@ -114,17 +114,23 @@ const Contacts = () => {
 
     if (name && email && message) {
       if (isEmail(email)) {
+        // show success message immediately after click
+        setSuccess(true);
+        setErrMsg('');
+        setName('');
+        setEmail('');
+        setMessage('');
+
+        // still attempt to send the form in background
         emailjs.sendForm(process.env.REACT_APP_YOUR_SERVICE_ID, process.env.REACT_APP_YOUR_TEMPLATE_ID, form.current, process.env.REACT_APP_YOUR_PUBLIC_KEY)
           .then((result) => {
-            console.log('success');
-            setSuccess(true);
-            setErrMsg('');
-            setName('');
-            setEmail('');
-            setMessage('');
-            setOpen(false);
-          }, (error) => {
-            console.log(error.text);
+            console.log('emailjs success', result.text);
+          })
+          .catch((error) => {
+            console.log('emailjs error', error.text || error);
+            setErrMsg('Failed to send message');
+            setOpen(true);
+            setSuccess(false);
           });
       } else {
         setErrMsg('Invalid email');

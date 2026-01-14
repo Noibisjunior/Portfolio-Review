@@ -1,5 +1,5 @@
 export const contactsData = {
-    email: 'Noibisjunior22@gmail.com',
+    email: 'abdulsalaam.m2203569@st.futminna.edu.ng',
     phone: '+23409057210160',
     address: 'Abuja,Nigeria ',
     github: 'https://github.com/Noibisjunior',

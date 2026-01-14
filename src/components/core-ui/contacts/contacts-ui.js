@@ -24,6 +24,7 @@ const ContactUI = ({ open, success, errMsg, handleClose, classes, handleContactF
         <div className='contacts-body'>
           <div className='contacts-form'>
             <form ref={form} onSubmit={handleContactForm}>
+              <input type="hidden" name="to_email" value={contactsData.email} />
               <div className='input-container'>
                 <label htmlFor='Name' className={classes.label}>
                   Name
