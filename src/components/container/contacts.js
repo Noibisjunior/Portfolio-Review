@@ -23,6 +23,7 @@ const Contacts = () => {
     }
 
     setOpen(false);
+    setSuccess(false);
   };
 
   const useStyles = makeStyles((t) => ({
